@@ -1,0 +1,8 @@
+{
+  "name": "Vaccine Inspector",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "6cf530e7"
+}

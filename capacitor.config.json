@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Vaccine Inspector",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
