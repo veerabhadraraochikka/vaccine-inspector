@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { NotificationService } from '../services/notification.service';
 import * as moment from 'moment';
 import { LoadingController, ModalController, ToastController } from '@ionic/angular';
-import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { NotifyModalComponent } from './notify-modal/notification-modal.component';
 import { take } from 'rxjs/operators';
 
@@ -36,7 +34,6 @@ export class NotificationComponent implements OnInit {
     private readonly notificationService: NotificationService,
     private readonly loadingController: LoadingController,
     public toastController: ToastController,
-    private localNotifications: LocalNotifications,
     public modalController: ModalController) {
     this.minDate = moment().format('YYYY-MM-DD');
     this.dateValue = this.minDate;
@@ -90,13 +87,7 @@ export class NotificationComponent implements OnInit {
       componentProps: {
         center: {
           date: this.dateValue,
-          state_name: this.selectedCenter['state_name'],
-          state_id: this.statevalue,
-          district_name: this.selectedCenter['district_name'],
           district_id: this.districtValue,
-          center_name: this.selectedCenter['name'],
-          pincode: this.selectedCenter['pincode'],
-          fee_type: this.selectedCenter['fee_type'],
           center_id: this.selectedCenter['center_id']
         }
       }

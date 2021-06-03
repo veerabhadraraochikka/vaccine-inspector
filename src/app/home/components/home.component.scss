@@ -1,0 +1,73 @@
+.centers-list {
+  padding: 10px;
+  ion-chip {
+    padding: 0px 12px;
+    height: 18px;
+    font-size: 12px;
+  }
+  .radio-label {
+    margin: 2px 0px;
+  }
+  .session-container {
+    margin-bottom: 5px;
+    border-radius: 10px;
+    &.available {
+      border: 1px solid rgb(97, 240, 97);
+    }
+    &.not-available {
+      border: 1px solid rgb(240, 97, 97);
+    }
+  }
+}
+
+.card-container {
+  padding-top: 50px;
+}
+
+.search-bar-item {
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+}
+
+.trash-outline-icon {
+  position: absolute;
+  cursor: pointer;
+  right: 10px;
+  font-size: 18px;
+  &:hover {
+    color: #f06161;
+  }
+}
+
+::ng-deep {
+  .home-component {
+    .search-input {
+      padding-left: 0;
+      input {
+        padding: 0 0 0 30px;
+        box-shadow: none;
+      }
+      .searchbar-cancel-button {
+        left: -3px;
+      }
+      .searchbar-search-icon {
+        top: 5px;
+        left: 4px;
+      }
+    }
+
+    .ion-available-btn.button-solid {
+      --box-shadow: none;
+    }
+  }
+}
+
+.no-records-found {
+  height: 100px;
+  display: flex;
+  place-content: center center;
+  flex-direction: column;
+  box-shadow: none;
+  text-align: center;
+}

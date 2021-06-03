@@ -49,20 +49,36 @@
 .search-bar-item {
   position: absolute;
   z-index: 10;
+  .search-input {
+    input {
+      padding: 0 0 0 30px;
+    }
+    .searchbar-cancel-button {
+      left: -3px;
+    }
+    .searchbar-search-icon {
+      top: 5px;
+      left: 4px;
+    }
+  }
+}
+::ng-deep {
+  .notification-component {
+    .search-input {
+      input {
+        box-shadow: none;
+      }
+    }
+    .ion-available-btn.button-solid {
+      --box-shadow: none;
+    }
+  }
 }
 .no-center-found {
-  margin: 15px;
   opacity: 0.3;
-}
-.search-input {
-  input {
-    padding: 0 0 0 30px;
-  }
-  .searchbar-cancel-button {
-    left: -3px;
-  }
-  .searchbar-search-icon {
-    top: 5px;
-    left: 4px;
-  }
+  display: flex;
+  height: 50%;
+  place-content: center;
+  flex-direction: column;
+  text-align: center;
 }

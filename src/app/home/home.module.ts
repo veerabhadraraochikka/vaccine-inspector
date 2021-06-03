@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './components/home.component';
 
 import { HomeRoutingModule } from './home-routing.module';
+import { SearchByPipe } from './pipes/search-by.pipe';
 
 @NgModule({
   imports: [
@@ -13,6 +14,6 @@ import { HomeRoutingModule } from './home-routing.module';
     FormsModule,
     HomeRoutingModule
   ],
-  declarations: [HomeComponent]
+  declarations: [HomeComponent, SearchByPipe]
 })
 export class HomeModule { }
