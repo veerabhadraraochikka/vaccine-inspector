@@ -1,0 +1,33 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Confirm Notification
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list class="notification-list">
+    <ion-item>
+      <ion-label>Check On Every</ion-label>
+      <ion-select [(ngModel)]="center.intervalDuration"
+        placeholder="Select State">
+        <ion-select-option *ngFor="let interval of intervals"
+          [value]="interval.value">{{ interval.key }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Notify Till Date</ion-label>
+      <ion-datetime [min]="minDate"
+        [max]="maxDate"
+        [(ngModel)]="center.notifyTillDate"></ion-datetime>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block"
+      (click)="registerNotify()">Register Notification</ion-button>
+  </ion-toolbar>
+</ion-footer>

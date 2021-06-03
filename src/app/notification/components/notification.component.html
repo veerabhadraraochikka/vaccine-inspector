@@ -2,10 +2,136 @@
   <ion-toolbar>
     <ion-title>
       Register Notifications
+      <ion-button color="success"
+        class="notify-button"
+        *ngIf="selectedCenter"
+        size="small"
+        (click)="registerNotify()">
+        Notify</ion-button>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  Up Coming...
+  <ion-list class="notification-list">
+    <ion-item>
+      <ion-label position="stacked">Date</ion-label>
+      <ion-datetime [min]="minDate"
+        [max]="maxDate"
+        [(ngModel)]="dateValue"
+        (ionChange)="onDateChange($event)"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>State</ion-label>
+      <ion-select [(ngModel)]="statevalue"
+        [disabled]="!dateValue"
+        (ionChange)="onStateChange($event)"
+        placeholder="Select State">
+        <ion-select-option *ngFor="let state of states"
+          [value]="state.state_id">{{ state.state_name }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>District</ion-label>
+      <ion-select [(ngModel)]="districtValue"
+        [disabled]="!statevalue"
+        (ionChange)="onDistrictChange($event)"
+        placeholder="Select District">
+        <ion-select-option *ngFor="let district of districts"
+          [value]="district.district_id">{{ district.district_name }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-list-header>
+      <ion-label>
+        Centers
+        <span class="center-filters">
+          <ion-icon class="search"
+            title="Toggle Search"
+            (click)="search.show = !search.show"
+            name="search-outline"></ion-icon>
+        </span>
+      </ion-label>
+    </ion-list-header>
+    <ng-container *ngIf="centers.length">
+      <ion-item *ngIf="search.show"
+        class="search-bar-item">
+        <ion-searchbar [(ngModel)]="search.input"
+          [style.width]="'50%'"
+          placeholder="Search Center Name, Fee, Pincode"
+          animated
+          class="search-input"
+          showCancelButton="focus"></ion-searchbar>
+        <ion-select [(ngModel)]="search.ageLimit"
+          [style.width]="'30%'"
+          placeholder="Age Limit">
+          <ion-select-option *ngFor="let age of ageLimts"
+            [value]="age">{{ age }} Years</ion-select-option>
+        </ion-select>
+        <ion-button color="{{search.onlyAvailable ? 'success' : 'light'}}"
+          size="small"
+          [style.width]="'20%'"
+          (click)="search.onlyAvailable = !search.onlyAvailable">
+          {{search.onlyAvailable ? 'Available' : 'All'}}</ion-button>
+      </ion-item>
+      <ion-item class="centers-list"
+        [class.padding-top]="search.show">
+        <ion-list>
+          <ion-radio-group [(ngModel)]="selectedCenter">
+            <ion-item *ngFor="let center of centers | searchBy: search.input : search.ageLimit : search.onlyAvailable"
+              class="center-item">
+              <ion-label class="radio-label">
+                <h6>{{ center.name}} ({{ center.pincode}})</h6>
+                <div class="vaccine-type">
+                  <ng-container *ngIf="center.fee_type === 'Paid'">
+                    <ion-chip *ngFor="let fee of center.vaccine_fees"
+                      color="warning"
+                      outline="true">
+                      <ion-label>{{ fee.vaccine }} - {{ fee.fee }}</ion-label>
+                    </ion-chip>
+                  </ng-container>
+                  <ion-chip *ngIf="center.fee_type === 'Free'"
+                    color="success"
+                    outline="true">
+                    <ion-label>{{ center.fee_type }}</ion-label>
+                  </ion-chip>
+                </div>
+                <div class="session-container"
+                  *ngFor="let session of center.sessions"
+                  [ngClass]="{ 'available': session.available_capacity, 'not-available': !session.available_capacity }">
+                  <ion-chip>
+                    <ion-label>Age: {{ session.min_age_limit }}
+                    </ion-label>
+                  </ion-chip>
+                  <ion-chip>
+                    <ion-label>{{ session.vaccine }}: {{ session.available_capacity }}
+                    </ion-label>
+                  </ion-chip>
+                  <ion-chip>
+                    <ion-label>D1: {{session.available_capacity_dose1 }}
+                    </ion-label>
+                  </ion-chip>
+                  <ion-chip>
+                    <ion-label>D2: {{ session.available_capacity_dose2 }}
+                    </ion-label>
+                  </ion-chip>
+                  <div class="slots-container">
+                    <ion-chip *ngFor="let slot of session.slots">
+                      <ion-label>{{ slot }} </ion-label>
+                    </ion-chip>
+                  </div>
+                </div>
+              </ion-label>
+              <ion-radio slot="start"
+                [value]="center"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+      </ion-item>
+    </ng-container>
+    <ng-container *ngIf="!centers.length">
+      <ion-label class="no-center-found">Centers Not Found...!</ion-label>
+    </ng-container>
+  </ion-list>
 </ion-content>

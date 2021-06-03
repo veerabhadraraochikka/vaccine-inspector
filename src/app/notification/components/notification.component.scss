@@ -1,0 +1,68 @@
+.notification-list {
+  height: 100%;
+  overflow: hidden;
+  .centers-list {
+    height: calc(100% - 195px);
+    overflow: auto;
+    &.padding-top {
+      padding-top: 55px;
+    }
+    ion-chip {
+      padding: 0px 12px;
+      height: 18px;
+      font-size: 12px;
+    }
+    .center-item > ion-radio {
+      margin-right: 15px;
+      margin-left: 0;
+    }
+    .radio-label {
+      margin: 2px 0px;
+    }
+    .session-container {
+      margin-bottom: 5px;
+      border-radius: 10px;
+      &.available {
+        border: 1px solid rgb(97, 240, 97);
+      }
+      &.not-available {
+        border: 1px solid rgb(240, 97, 97);
+      }
+    }
+  }
+}
+.center-filters {
+  float: right;
+  position: relative;
+  .search {
+    font-size: 25px;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+  }
+}
+.notify-button {
+  position: absolute;
+  right: 15px;
+  top: -5px;
+}
+.search-bar-item {
+  position: absolute;
+  z-index: 10;
+}
+.no-center-found {
+  margin: 15px;
+  opacity: 0.3;
+}
+.search-input {
+  input {
+    padding: 0 0 0 30px;
+  }
+  .searchbar-cancel-button {
+    left: -3px;
+  }
+  .searchbar-search-icon {
+    top: 5px;
+    left: 4px;
+  }
+}

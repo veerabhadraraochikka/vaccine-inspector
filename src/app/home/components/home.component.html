@@ -7,5 +7,25 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  No Notifications Found
+  <ion-card *ngFor="let notify of notified; trackBy: trackByFn">
+    <ion-item>
+      <ion-icon name="pin"
+        slot="start"></ion-icon>
+      <ion-label>{{ notify.center_name }}</ion-label>
+      <ion-icon slot="end"
+        name="trash-outline"
+        (click)="deleteCenter(notify.center_id)"></ion-icon>
+    </ion-item>
+
+    <ion-card-content>
+      State: {{ notify.state_name }}<br>
+      District: {{ notify.district_name }}<br>
+      Pincode: {{ notify.pincode }}<br>
+      Fee Type: {{ notify.fee_type }}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="!notified.length">
+    No Notifications Found. Please add Vaccine Center to Notify
+  </ion-card>
 </ion-content>
