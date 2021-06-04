@@ -193,7 +193,7 @@ export class HomeComponent implements OnInit, ViewWillEnter {
     const count = center.sessions.reduce((pr: number, session: any) => pr + session.available_capacity, 0);
     if (count) {
       this.localNotifications.schedule({
-        id: center.center_id,
+        id: center.center_id + count,
         title: 'Vaccine Available@' + center.name,
         text: `Count - ${count} | Address: ${center.address}`,
         lockscreen: true,

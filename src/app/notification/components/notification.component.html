@@ -44,45 +44,46 @@
           [value]="district.district_id">{{ district.district_name }}</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-list-header>
-      <ion-label>
-        Centers
-        <span class="center-filters"
-          *ngIf="centers.length">
-          <ion-icon class="search"
-            title="Toggle Search"
-            [class.active]="search.show"
-            (click)="search.show = !search.show"
-            name="search-outline"></ion-icon>
-          <ion-icon class="show-slots"
-            [class.active]="search.showSlots"
-            (click)="search.showSlots = !search.showSlots"
-            name="calendar-outline"></ion-icon>
-          <ion-icon class="show-only-available"
-            [class.active]="search.onlyAvailable"
-            (click)="search.onlyAvailable = !search.onlyAvailable"
-            name="checkmark-done-outline"></ion-icon>
-        </span>
-      </ion-label>
-    </ion-list-header>
-    <ion-item *ngIf="search.show"
-      class="search-bar-item">
-      <ion-searchbar [(ngModel)]="search.input"
-        [style.width]="'70%'"
-        placeholder="Center, Fee Type, Address"
-        animated
-        class="search-input"
-        showCancelButton="focus"></ion-searchbar>
-      <ion-select [(ngModel)]="search.ageLimit"
-        [style.width]="'30%'"
-        [interfaceOptions]="interfaceOptions"
-        interface="popover"
-        placeholder="Age Limit">
-        <ion-select-option *ngFor="let age of ageLimts"
-          [value]="age">{{ age }} Years</ion-select-option>
-      </ion-select>
-    </ion-item>
     <ng-container *ngIf="(centers | searchBy: search.input : search.ageLimit : search.onlyAvailable) as filterClients">
+      <ion-list-header>
+        <ion-label>
+          Centers <small>({{filterClients?.length}})</small>
+          <span class="center-filters"
+            *ngIf="centers.length">
+            <ion-icon class="search"
+              title="Toggle Search"
+              [class.active]="search.show"
+              (click)="search.show = !search.show"
+              name="search-outline"></ion-icon>
+            <ion-icon class="show-slots"
+              [class.active]="search.showSlots"
+              (click)="search.showSlots = !search.showSlots"
+              name="calendar-outline"></ion-icon>
+            <ion-icon class="show-only-available"
+              [class.active]="search.onlyAvailable"
+              (click)="search.onlyAvailable = !search.onlyAvailable"
+              name="checkmark-done-outline"></ion-icon>
+          </span>
+        </ion-label>
+      </ion-list-header>
+      <ion-item *ngIf="search.show"
+        class="search-bar-item">
+        <ion-searchbar [(ngModel)]="search.input"
+          [style.width]="'70%'"
+          placeholder="Center, Fee Type, Address"
+          animated
+          class="search-input"
+          showCancelButton="focus"></ion-searchbar>
+        <ion-select [(ngModel)]="search.ageLimit"
+          [style.width]="'30%'"
+          [interfaceOptions]="interfaceOptions"
+          interface="popover"
+          placeholder="Age Limit">
+          <ion-select-option *ngFor="let age of ageLimts"
+            [value]="age">{{ age }} Years</ion-select-option>
+        </ion-select>
+      </ion-item>
+
       <ion-item class="centers-list"
         *ngIf="filterClients.length"
         [class.padding-top]="search.show">
