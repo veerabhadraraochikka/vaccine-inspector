@@ -2,6 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import * as moment from 'moment';
 
+import { DatePickerPluginInterface, DatePickerOptions } from '@capacitor-community/date-picker';
+import { Plugins } from '@capacitor/core';
+
+const datePicker: DatePickerPluginInterface = Plugins.DatePickerPlugin as any;
 @Component({
   selector: 'app-notification',
   templateUrl: 'notification-modal.component.html',
@@ -29,6 +33,17 @@ export class NotifyModalComponent implements OnInit {
   ngOnInit(): void {
     this.center.intervalDuration = 10;
     this.center.notifyTillDate = moment().add(1, 'days').format('YYYY-MM-DD');
+  }
+
+  openDatePicker(): void {
+    datePicker.present({
+      mode: 'date',
+      min: this.minDate,
+      max: this.maxDate,
+      date: this.center.notifyTillDate
+    } as DatePickerOptions).then((date) => {
+      this.center.notifyTillDate = moment(date as any).format('YYYY-MM-DD');
+    });
   }
 
   async registerNotify(): Promise<void> {

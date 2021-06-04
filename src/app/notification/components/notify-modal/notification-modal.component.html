@@ -16,11 +16,10 @@
           [value]="interval.value">{{ interval.key }}</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-item>
-      <ion-label position="stacked">Notify Till Date</ion-label>
-      <ion-datetime [min]="minDate"
-        [max]="maxDate"
-        [(ngModel)]="center.notifyTillDate"></ion-datetime>
+    <ion-item (click)="openDatePicker()">
+      <ion-label>Notify Till Date</ion-label>
+      <ion-label position="fixed"
+        slot="end">{{center.notifyTillDate}}</ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

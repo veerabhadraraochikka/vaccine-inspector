@@ -15,12 +15,10 @@
 <ion-content [fullscreen]="true"
   class="notification-component">
   <ion-list class="notification-list">
-    <ion-item>
-      <ion-label position="stacked">Date</ion-label>
-      <ion-datetime [min]="minDate"
-        [max]="maxDate"
-        [(ngModel)]="dateValue"
-        (ionChange)="onDateChange($event)"></ion-datetime>
+    <ion-item (click)="openDatePicker()">
+      <ion-label>Date</ion-label>
+      <ion-label position="fixed"
+        slot="end">{{this.dateValue}}</ion-label>
     </ion-item>
 
     <ion-item>

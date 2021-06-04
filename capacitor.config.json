@@ -2,5 +2,13 @@
 	"appId": "io.ionic.vaccineInspector",
 	"appName": "Vaccine Inspector",
 	"webDir": "www",
-	"bundledWebRuntime": false
+	"bundledWebRuntime": false,
+	"plugins": {
+    "DatePickerPlugin": {
+      "mode": "date",
+      "locale": "pt_BR",
+      "current": "13/07/2019",
+      "format": "dd/MM/yyyy"
+    }
+  }
 }

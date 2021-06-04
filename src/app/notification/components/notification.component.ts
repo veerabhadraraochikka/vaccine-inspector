@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { NotificationService } from '../services/notification.service';
 import * as moment from 'moment';
-import { LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
 import { NotifyModalComponent } from './notify-modal/notification-modal.component';
 import { take } from 'rxjs/operators';
 
+import { DatePickerPluginInterface, DatePickerOptions } from '@capacitor-community/date-picker';
+import { Plugins } from '@capacitor/core';
+
+const datePicker: DatePickerPluginInterface = Plugins.DatePickerPlugin as any;
 @Component({
   selector: 'app-notification',
   templateUrl: 'notification.component.html',
@@ -33,8 +37,7 @@ export class NotificationComponent implements OnInit {
   constructor(
     private readonly notificationService: NotificationService,
     private readonly loadingController: LoadingController,
-    public toastController: ToastController,
-    public modalController: ModalController) {
+    private readonly modalController: ModalController) {
     this.minDate = moment().format('YYYY-MM-DD');
     this.dateValue = this.minDate;
     this.maxDate = moment().add(10, 'days').format('YYYY-MM-DD');
@@ -79,6 +82,17 @@ export class NotificationComponent implements OnInit {
     this.getCenters();
   }
 
+  openDatePicker(): void {
+    datePicker.present({
+      mode: 'date',
+      min: this.minDate,
+      max: this.maxDate,
+      date: this.dateValue
+    } as DatePickerOptions).then((date) => {
+      this.dateValue = moment(date as any).format('YYYY-MM-DD');
+    });
+  }
+
   async registerNotify(): Promise<void> {
     const modal = await this.modalController.create({
       component: NotifyModalComponent,
@@ -104,6 +118,12 @@ export class NotificationComponent implements OnInit {
         this.notificationService.getCenters(this.districtValue, moment(this.dateValue).format('DD-MM-YYYY')).pipe(take(1)).subscribe((data) => {
           this.hideLoading();
           this.centers = data;
+          this.search = {
+            show: false,
+            input: '',
+            ageLimit: 'All',
+            onlyAvailable: false
+          }
         });
       }
     })
