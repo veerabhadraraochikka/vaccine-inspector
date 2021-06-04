@@ -20,7 +20,6 @@ export class HomeComponent implements OnInit, ViewWillEnter {
   centerIds: any = undefined;
   intervalTimer: any;
   latestCenterAvailability: any = [];
-  nonAvailableCenters: any = [];
   search: any = {
     show: false,
     input: '',
@@ -75,7 +74,6 @@ export class HomeComponent implements OnInit, ViewWillEnter {
     localStorage.removeItem(centerId);
     this.centerIds = this.centerIds.filter((center: any) => center !== centerId);
     this.latestCenterAvailability = this.latestCenterAvailability.filter((center: any) => center.center_id !== centerId);
-    this.nonAvailableCenters = this.nonAvailableCenters.filter((center: any) => center.center_id !== centerId);
     if (!this.latestCenterAvailability.length) {
       this.stopIntervals();
     }
@@ -107,7 +105,6 @@ export class HomeComponent implements OnInit, ViewWillEnter {
   private clearList(): void {
     this.notified = [];
     this.latestCenterAvailability = [];
-    this.nonAvailableCenters = [];
   }
 
   private isNotificationActive(tillDate: any): boolean {
@@ -128,7 +125,6 @@ export class HomeComponent implements OnInit, ViewWillEnter {
 
   private async getLatestSlots(): Promise<void> {
     this.latestCenterAvailability = [];
-    this.nonAvailableCenters = [];
     const groupCalls: any = [];
     const groupBy = this.groupByDistrict();
     await this.showLoading();
@@ -140,17 +136,8 @@ export class HomeComponent implements OnInit, ViewWillEnter {
         this.hideLoading();
         this.latestCenterAvailability = [
           ...this.latestCenterAvailability,
-          ...group.filter((center: any) => {
-            const latest = this.centerIds.includes(center.center_id.toString());
-            if (latest) {
-              this.centerIds = this.centerIds.filter((c: any) => c === center.center_id.toString());
-            }
-            return latest;
-          })
+          ...group.filter((center: any) => this.centerIds.includes(center.center_id.toString()))
         ];
-      });
-      this.centerIds.forEach((center: any) => {
-        this.nonAvailableCenters.push(JSON.parse(localStorage.getItem(center)));
       });
       this.pushNotify();
     }, async () => {

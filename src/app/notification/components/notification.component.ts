@@ -27,8 +27,10 @@ export class NotificationComponent implements OnInit {
     show: false,
     input: '',
     ageLimit: 'All',
-    onlyAvailable: false
+    onlyAvailable: false,
+    showSlots: false
   }
+  showSlots: boolean = false;
   ageLimts: any = ['All', '18 - 44', '45+'];
   interfaceOptions = { header: 'Age Limit' };
 
@@ -117,7 +119,8 @@ export class NotificationComponent implements OnInit {
             show: false,
             input: '',
             ageLimit: 'All',
-            onlyAvailable: false
+            onlyAvailable: false,
+            showSlots: false
           }
         });
       }

@@ -51,16 +51,25 @@
           *ngIf="centers.length">
           <ion-icon class="search"
             title="Toggle Search"
+            [class.active]="search.show"
             (click)="search.show = !search.show"
             name="search-outline"></ion-icon>
+          <ion-icon class="show-slots"
+            [class.active]="search.showSlots"
+            (click)="search.showSlots = !search.showSlots"
+            name="calendar-outline"></ion-icon>
+          <ion-icon class="show-only-available"
+            [class.active]="search.onlyAvailable"
+            (click)="search.onlyAvailable = !search.onlyAvailable"
+            name="checkmark-done-outline"></ion-icon>
         </span>
       </ion-label>
     </ion-list-header>
     <ion-item *ngIf="search.show"
       class="search-bar-item">
       <ion-searchbar [(ngModel)]="search.input"
-        [style.width]="'50%'"
-        placeholder="Search Center"
+        [style.width]="'70%'"
+        placeholder="Center, Fee Type, Address"
         animated
         class="search-input"
         showCancelButton="focus"></ion-searchbar>
@@ -72,12 +81,6 @@
         <ion-select-option *ngFor="let age of ageLimts"
           [value]="age">{{ age }} Years</ion-select-option>
       </ion-select>
-      <ion-button color="{{search.onlyAvailable ? 'success' : 'light'}}"
-        size="small"
-        class="ion-available-btn"
-        [style.width]="'20%'"
-        (click)="search.onlyAvailable = !search.onlyAvailable">
-        {{search.onlyAvailable ? 'Available' : 'All'}}</ion-button>
     </ion-item>
     <ng-container *ngIf="(centers | searchBy: search.input : search.ageLimit : search.onlyAvailable) as filterClients">
       <ion-item class="centers-list"
@@ -88,8 +91,10 @@
             <ion-item *ngFor="let center of filterClients"
               class="center-item">
               <ion-label class="radio-label">
-                <h6>{{ center.name }} ({{ center.pincode}})</h6>
-                <h6>{{ center.address }}</h6>
+                <h3 style="color: #9797ff;">{{ center.name }}</h3>
+                <h6 style="opacity: 0.7;">{{ center.state_name }}, {{ center.district_name }} - {{ center.pincode}}
+                  <br>{{ center.address }}
+                </h6>
                 <div class="vaccine-type">
                   <ng-container *ngIf="center.fee_type === 'Paid'">
                     <ion-chip *ngFor="let fee of center.vaccine_fees"
@@ -121,7 +126,8 @@
                   <ion-chip [color]="session.available_capacity_dose2 ? 'success':''">
                     <ion-label>D2: {{ session.available_capacity_dose2 }} </ion-label>
                   </ion-chip>
-                  <div class="slots-container">
+                  <div class="slots-container"
+                    *ngIf="search.showSlots">
                     <ion-chip *ngFor="let slot of session.slots">
                       <ion-label>{{ slot }} </ion-label>
                     </ion-chip>

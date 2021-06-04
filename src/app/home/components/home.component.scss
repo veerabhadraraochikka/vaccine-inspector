@@ -44,17 +44,30 @@
   cursor: pointer;
   right: 60px;
   font-size: 26px;
+  top: 15px;
   &:hover {
     color: rgb(0, 201, 10);
+  }
+}
+
+.show-only-available {
+  position: absolute;
+  cursor: pointer;
+  right: 110px;
+  font-size: 26px;
+  top: 15px;
+  &.active {
+    color: rgb(97, 240, 97);
   }
 }
 
 .notify-outline-icon {
   position: absolute;
   cursor: pointer;
-  right: 15px;
+  right: 14px;
   font-size: 28px;
   color: red;
+  top: 15px;
   &:hover {
     color: #2202b4;
   }
