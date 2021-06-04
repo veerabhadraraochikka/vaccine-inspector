@@ -141,7 +141,10 @@ export class HomeComponent implements OnInit, ViewWillEnter {
         position: 'top'
       });
       toast.present();
-    })
+    });
+    if (!this.centerIds.length) {
+      this.stopIntervals();
+    }
   }
 
   private groupByDistrict(): any {
