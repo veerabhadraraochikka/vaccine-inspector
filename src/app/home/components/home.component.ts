@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
-import { ToastController, ViewWillEnter } from '@ionic/angular';
+import { ModalController, ToastController, ViewWillEnter } from '@ionic/angular';
 import * as _moment from 'moment';
-import { forkJoin, interval } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { NotificationService } from 'src/app/notification/services/notification.service';
+import { SearchByPipe } from '../pipes/search-by.pipe';
+import { NotifyModalComponent } from './notify-modal/notification-modal.component';
 
 const moment = _moment;
 @Component({
@@ -16,8 +18,9 @@ export class HomeComponent implements OnInit, ViewWillEnter {
 
   notified: any = [];
   centerIds: any = undefined;
-  intervals: any;
+  intervalTimer: any;
   latestCenterAvailability: any = [];
+  nonAvailableCenters: any = [];
   search: any = {
     show: false,
     input: '',
@@ -26,40 +29,41 @@ export class HomeComponent implements OnInit, ViewWillEnter {
   }
   ageLimts: any = ['All', '18 - 44', '45+']
   interfaceOptions = { header: 'Age Limit' };
+  intervalSettings: any = {
+    active: false
+  }
+  intervalRunning: boolean = false;
 
   constructor(private localNotifications: LocalNotifications,
     private readonly notificationService: NotificationService,
+    private readonly modalController: ModalController,
     private readonly toastController: ToastController) {
   }
 
+  ngOnInit(): void { }
+
   ionViewWillEnter(): void {
-    const localKeys = Object.keys(localStorage);
-    if (!localKeys.length) {
-      this.centerIds = [];
-      this.latestCenterAvailability = [];
-      return;
-    }
-    if (this.centerIds === undefined || this.centerIds.toString() !== localKeys.toString()) {
+    this.onPageRender();
+  }
+
+  onPageRender(): void {
+    const notify = JSON.parse(localStorage.getItem('NOTIFY') || '{}');
+    this.intervalSettings = {
+      ...notify,
+      active: this.isNotificationActive(notify.notifyTillDate)
+    };
+    const localKeys = Object.keys(localStorage).filter((key) => key !== 'NOTIFY');
+    this.clearList();
+    this.centerIds = [];
+    if (localKeys.length) {
       this.centerIds = localKeys;
-      this.getCenters();
+      this.initiateIntervals();
     }
   }
 
-
-  ngOnInit(): void { }
-
   getCenters(): void {
-    this.notified = [];
     this.centerIds.forEach((key: any) => {
-      const center = JSON.parse(localStorage.getItem(key) || '{}');
-      if (this.isValidCenter(center)) {
-        this.notified.push({
-          center_id: key,
-          ...center
-        });
-      } else {
-        this.deleteCenter(key);
-      }
+      this.notified.push(JSON.parse(localStorage.getItem(key) || '{}'));
     });
     this.getLatestSlots();
   }
@@ -68,18 +72,46 @@ export class HomeComponent implements OnInit, ViewWillEnter {
     localStorage.removeItem(centerId);
     this.centerIds = this.centerIds.filter((center: any) => center !== centerId);
     this.latestCenterAvailability = this.latestCenterAvailability.filter((center: any) => center.center_id !== centerId);
+    this.nonAvailableCenters = this.nonAvailableCenters.filter((center: any) => center.center_id !== centerId);
+    if (!this.latestCenterAvailability.length) {
+      this.stopIntervals();
+    }
   }
 
-  trackByFn(index: number, item: any) {
+  trackByFn(index: number, item: any): any {
     return item.center_id;
   }
 
-  private isValidCenter(center: any): boolean {
-    return moment(moment()).isSameOrBefore(center.notifyTillDate);
+  async openNotificationSettings(): Promise<void> {
+    const modal = await this.modalController.create({
+      component: NotifyModalComponent,
+      cssClass: 'notify-modal-component',
+      swipeToClose: true
+    });
+    modal.present();
+    modal.onWillDismiss().then((data) => {
+      if (data.data) {
+        if (data.data === 'S') {
+          this.stopIntervals();
+          return;
+        }
+        this.clearList();
+        this.initiateIntervals();
+      }
+    })
+  }
+
+  private clearList(): void {
+    this.notified = [];
+    this.latestCenterAvailability = [];
+    this.nonAvailableCenters = [];
+  }
+
+  private isNotificationActive(tillDate: any): boolean {
+    return moment(moment()).isSameOrBefore(tillDate);
   }
 
   private getLatestSlots(): void {
-    this.latestCenterAvailability = [];
     const groupCalls: any = [];
     const groupBy = this.groupByDistrict();
     for (let group in groupBy) {
@@ -89,10 +121,19 @@ export class HomeComponent implements OnInit, ViewWillEnter {
       groups.forEach((group: any = []) => {
         this.latestCenterAvailability = [
           ...this.latestCenterAvailability,
-          ...group.filter((center: any) => this.centerIds.includes(center.center_id.toString()))
-        ]
+          ...group.filter((center: any) => {
+            const latest = this.centerIds.includes(center.center_id.toString());
+            if (latest) {
+              this.centerIds = this.centerIds.filter((c: any) => c === center.center_id.toString());
+            }
+            return latest;
+          })
+        ];
       });
-      this.setIntervals();
+      this.centerIds.forEach((center: any) => {
+        this.nonAvailableCenters.push(JSON.parse(localStorage.getItem(center)));
+      });
+      this.pushNotify();
     }, async () => {
       const toast = await this.toastController.create({
         message: 'Unable to fetch latest availability',
@@ -110,8 +151,32 @@ export class HomeComponent implements OnInit, ViewWillEnter {
     }, {});
   }
 
-  private setIntervals(): void {
+  private initiateIntervals(): void {
+    this.getCenters();
+    this.stopIntervals();
+    if (this.intervalSettings.active) {
+      this.resumeIntervals();
+    }
+  }
 
+  resumeIntervals(): void {
+    this.intervalRunning = true;
+    this.intervalTimer = setInterval(() => {
+      this.clearList();
+      this.getCenters()
+    }, this.intervalSettings.intervalDuration * (1000 * 60));
+  }
+
+  stopIntervals() {
+    this.intervalRunning = false;
+    this.intervalTimer && clearInterval(this.intervalTimer);
+  }
+
+  pushNotify(): void {
+    const avail = new SearchByPipe().transform(this.latestCenterAvailability, '', 'All', true);
+    avail.forEach((item: any) => {
+      this.showNotification(item);
+    });
   }
 
   private showNotification(center: any): void {

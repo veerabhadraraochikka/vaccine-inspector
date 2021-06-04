@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NotificationService } from '../services/notification.service';
 import * as moment from 'moment';
-import { LoadingController, ModalController } from '@ionic/angular';
-import { NotifyModalComponent } from './notify-modal/notification-modal.component';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { take } from 'rxjs/operators';
 
 import { DatePickerPluginInterface, DatePickerOptions } from '@capacitor-community/date-picker';
@@ -38,7 +37,7 @@ export class NotificationComponent implements OnInit {
   constructor(
     private readonly notificationService: NotificationService,
     private readonly loadingController: LoadingController,
-    private readonly modalController: ModalController) {
+    private readonly toastController: ToastController) {
     this.minDate = moment().format('YYYY-MM-DD');
     this.dateValue = this.minDate;
     this.maxDate = moment().add(10, 'days').format('YYYY-MM-DD');
@@ -95,19 +94,18 @@ export class NotificationComponent implements OnInit {
   }
 
   async registerNotify(): Promise<void> {
-    const modal = await this.modalController.create({
-      component: NotifyModalComponent,
-      cssClass: 'notify-modal-component',
-      swipeToClose: true,
-      componentProps: {
-        center: {
-          date: this.dateValue,
-          district_id: this.districtValue,
-          center_id: this.selectedCenter['center_id']
-        }
-      }
+    localStorage.setItem(this.selectedCenter['center_id'], JSON.stringify({
+      date: this.dateValue,
+      district_id: this.districtValue,
+      center_id: this.selectedCenter['center_id'],
+      status: 1
+    }));
+    const toast = await this.toastController.create({
+      message: 'You will be notified when you got slots',
+      duration: 500,
+      position: 'top'
     });
-    modal.present();
+    toast.present();
   }
 
   private async getCenters(): Promise<void> {

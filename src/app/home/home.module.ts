@@ -6,6 +6,7 @@ import { HomeComponent } from './components/home.component';
 
 import { HomeRoutingModule } from './home-routing.module';
 import { SearchByPipe } from './pipes/search-by.pipe';
+import { NotifyModalComponent } from './components/notify-modal/notification-modal.component';
 
 @NgModule({
   imports: [
@@ -14,6 +15,6 @@ import { SearchByPipe } from './pipes/search-by.pipe';
     FormsModule,
     HomeRoutingModule
   ],
-  declarations: [HomeComponent, SearchByPipe]
+  declarations: [HomeComponent, SearchByPipe, NotifyModalComponent]
 })
 export class HomeModule { }

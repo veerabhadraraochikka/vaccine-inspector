@@ -13,7 +13,6 @@ const datePicker: DatePickerPluginInterface = Plugins.DatePickerPlugin as any;
 })
 export class NotifyModalComponent implements OnInit {
 
-  @Input() center: any;
   minDate: any;
   maxDate: any;
   intervals: any = [{ value: 5, key: '5 Minutes' },
@@ -23,6 +22,7 @@ export class NotifyModalComponent implements OnInit {
   { value: 60, key: '1 Hour' },
   { value: 360, key: '6 Hours' },
   { value: 1440, key: 'Day' }];
+  notify: any;
 
   constructor(public modalController: ModalController,
     public toastController: ToastController) {
@@ -31,8 +31,8 @@ export class NotifyModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.center.intervalDuration = 10;
-    this.center.notifyTillDate = moment().add(1, 'days').format('YYYY-MM-DD');
+    const defaults = { intervalDuration: 10, notifyTillDate: moment().add(1, 'days').format('YYYY-MM-DD') };
+    this.notify = JSON.parse(localStorage.getItem('NOTIFY') || JSON.stringify(defaults));
   }
 
   openDatePicker(): void {
@@ -40,22 +40,28 @@ export class NotifyModalComponent implements OnInit {
       mode: 'date',
       min: this.minDate,
       max: this.maxDate,
-      date: this.center.notifyTillDate
+      date: this.notify.notifyTillDate
     } as DatePickerOptions).then((date) => {
-      this.center.notifyTillDate = moment(date as any).format('YYYY-MM-DD');
+      this.notify.notifyTillDate = moment(date as any).format('YYYY-MM-DD');
     });
   }
 
-  async registerNotify(): Promise<void> {
-    localStorage.setItem(this.center['center_id'], JSON.stringify(this.center));
+  async saveNotify(): Promise<void> {
+    localStorage.setItem('NOTIFY', JSON.stringify(this.notify));
     const toast = await this.toastController.create({
       message: 'Vaccine Center Slot will be Notified',
       duration: 500,
       position: 'top'
     });
     toast.present();
-    this.modalController.dismiss({
-      'dismissed': true
-    })
+    this.modalController.dismiss('R');
+  }
+
+  dismissModal(): void {
+    this.modalController.dismiss(null);
+  }
+
+  stopNotify(): void {
+    this.modalController.dismiss('S');
   }
 }

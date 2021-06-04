@@ -1,8 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Confirm Notification
+      Notification Settings
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">Close</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -10,9 +13,9 @@
   <ion-list class="notification-list">
     <ion-item>
       <ion-label>Check On Every</ion-label>
-      <ion-select [(ngModel)]="center.intervalDuration"
+      <ion-select [(ngModel)]="notify.intervalDuration"
         interface="popover"
-        placeholder="Select State">
+        placeholder="Select Interval">
         <ion-select-option *ngFor="let interval of intervals"
           [value]="interval.value">{{ interval.key }}</ion-select-option>
       </ion-select>
@@ -20,14 +23,19 @@
     <ion-item (click)="openDatePicker()">
       <ion-label>Notify Till Date</ion-label>
       <ion-label position="fixed"
-        slot="end">{{center.notifyTillDate}}</ion-label>
+        slot="end">{{notify.notifyTillDate}}</ion-label>
     </ion-item>
   </ion-list>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
-    <ion-button expand="block"
-      (click)="registerNotify()">Register Notification</ion-button>
+    <div class="action-buttons">
+      <ion-button class="half-width"
+        (click)="stopNotify()">Stop Notify</ion-button>
+      <ion-button class="half-width"
+        (click)="saveNotify()">Save</ion-button>
+    </div>
+
   </ion-toolbar>
 </ion-footer>

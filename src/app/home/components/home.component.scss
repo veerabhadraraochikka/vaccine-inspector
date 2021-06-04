@@ -29,7 +29,6 @@
   z-index: 10;
   width: 100%;
 }
-
 .trash-outline-icon {
   position: absolute;
   cursor: pointer;
@@ -37,6 +36,27 @@
   font-size: 18px;
   &:hover {
     color: #f06161;
+  }
+}
+
+.notify-outline-icon {
+  position: absolute;
+  cursor: pointer;
+  right: 10px;
+  font-size: 24px;
+  color: red;
+  &:hover {
+    color: #2202b4;
+  }
+  &.active {
+    color: rgb(0, 201, 10);
+    animation: blinker 1s linear infinite;
+  }
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
   }
 }
 

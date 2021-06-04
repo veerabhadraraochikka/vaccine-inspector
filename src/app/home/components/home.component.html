@@ -4,6 +4,11 @@
     <ion-title>
       Active Notifications
     </ion-title>
+    <ion-icon slot="end"
+      [class.active]="intervalRunning"
+      class="notify-outline-icon"
+      name="notifications-outline"
+      (click)="openNotificationSettings()"></ion-icon>
   </ion-toolbar>
 </ion-header>
 

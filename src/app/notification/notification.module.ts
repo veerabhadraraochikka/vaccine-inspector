@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { NotificationComponent } from './components/notification.component';
-import { NotifyModalComponent } from './components/notify-modal/notification-modal.component';
 import { SearchByPipe } from './pipes/search-by.pipe';
 import { NotificationRoutingModule } from './notification-routing.module';
 
@@ -16,6 +15,6 @@ import { NotificationRoutingModule } from './notification-routing.module';
     NotificationRoutingModule
   ],
   providers: [],
-  declarations: [NotificationComponent, NotifyModalComponent, SearchByPipe]
+  declarations: [NotificationComponent, SearchByPipe]
 })
 export class NotificationModule { }
