@@ -25,6 +25,7 @@
       <ion-label>State</ion-label>
       <ion-select [(ngModel)]="statevalue"
         [disabled]="!dateValue"
+        interface="popover"
         (ionChange)="onStateChange($event)"
         placeholder="Select State">
         <ion-select-option *ngFor="let state of states"
@@ -36,6 +37,7 @@
       <ion-label>District</ion-label>
       <ion-select [(ngModel)]="districtValue"
         [disabled]="!statevalue"
+        interface="popover"
         (ionChange)="onDistrictChange($event)"
         placeholder="Select District">
         <ion-select-option *ngFor="let district of districts"
@@ -64,6 +66,8 @@
         showCancelButton="focus"></ion-searchbar>
       <ion-select [(ngModel)]="search.ageLimit"
         [style.width]="'30%'"
+        [interfaceOptions]="interfaceOptions"
+        interface="popover"
         placeholder="Age Limit">
         <ion-select-option *ngFor="let age of ageLimts"
           [value]="age">{{ age }} Years</ion-select-option>

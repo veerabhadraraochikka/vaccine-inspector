@@ -32,7 +32,8 @@ export class NotificationComponent implements OnInit {
     ageLimit: 'All',
     onlyAvailable: false
   }
-  ageLimts: any = ['All', '18 - 44', '45+']
+  ageLimts: any = ['All', '18 - 44', '45+'];
+  interfaceOptions = { header: 'Age Limit' };
 
   constructor(
     private readonly notificationService: NotificationService,
@@ -126,6 +127,6 @@ export class NotificationComponent implements OnInit {
           }
         });
       }
-    })
+    });
   }
 }

@@ -18,6 +18,8 @@
       showCancelButton="focus"></ion-searchbar>
     <ion-select [(ngModel)]="search.ageLimit"
       [style.width]="'35%'"
+      interface="popover"
+      [interfaceOptions]="interfaceOptions"
       placeholder="Age Limit">
       <ion-select-option *ngFor="let age of ageLimts"
         [value]="age">{{ age }} Years</ion-select-option>

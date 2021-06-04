@@ -49,6 +49,7 @@
 .search-bar-item {
   position: absolute;
   z-index: 10;
+  border-top: 1px solid;
   .search-input {
     input {
       padding: 0 0 0 30px;

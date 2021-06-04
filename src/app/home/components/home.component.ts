@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit, ViewWillEnter {
     onlyAvailable: false
   }
   ageLimts: any = ['All', '18 - 44', '45+']
+  interfaceOptions = { header: 'Age Limit' };
 
   constructor(private localNotifications: LocalNotifications,
     private readonly notificationService: NotificationService,

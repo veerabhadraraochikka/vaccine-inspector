@@ -11,6 +11,7 @@
     <ion-item>
       <ion-label>Check On Every</ion-label>
       <ion-select [(ngModel)]="center.intervalDuration"
+        interface="popover"
         placeholder="Select State">
         <ion-select-option *ngFor="let interval of intervals"
           [value]="interval.value">{{ interval.key }}</ion-select-option>
