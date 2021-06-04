@@ -87,9 +87,9 @@ export class NotificationComponent implements OnInit {
       status: 1
     }));
     const toast = await this.toastController.create({
-      message: 'You will be notified when you got slots',
-      duration: 500,
-      position: 'top'
+      message: 'You will be notified when slots are available',
+      duration: 1000,
+      position: 'middle'
     });
     toast.present();
   }

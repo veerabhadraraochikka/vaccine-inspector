@@ -45,6 +45,10 @@
   right: 60px;
   font-size: 26px;
   top: 15px;
+  &.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
   &:hover {
     color: rgb(0, 201, 10);
   }
@@ -70,6 +74,10 @@
   top: 15px;
   &:hover {
     color: #2202b4;
+  }
+  &.disabled {
+    opacity: 0.3;
+    pointer-events: none;
   }
   &.active {
     color: rgb(0, 201, 10);

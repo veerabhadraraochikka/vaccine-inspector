@@ -71,8 +71,8 @@ export class HomeComponent implements OnInit, ViewWillEnter {
   }
 
   deleteCenter(centerId: string): void {
-    localStorage.removeItem(centerId);
-    this.centerIds = this.centerIds.filter((center: any) => center !== centerId);
+    localStorage.removeItem(centerId.toString());
+    this.centerIds = this.centerIds.filter((center: any) => center !== centerId.toString());
     this.latestCenterAvailability = this.latestCenterAvailability.filter((center: any) => center.center_id !== centerId);
     if (!this.latestCenterAvailability.length) {
       this.stopIntervals();
@@ -144,9 +144,10 @@ export class HomeComponent implements OnInit, ViewWillEnter {
       const toast = await this.toastController.create({
         message: 'Unable to fetch latest availability',
         duration: 500,
-        position: 'top'
+        position: 'middle'
       });
       toast.present();
+      this.hideLoading();
     });
     if (!this.centerIds.length) {
       this.stopIntervals();

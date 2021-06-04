@@ -1,6 +1,6 @@
 {
-	"appId": "io.ionic.vaccineInspector",
-	"appName": "Vaccine Inspector",
+	"appId": "io.ionic.vaccineFinder",
+	"appName": "Vaccine Finder",
 	"webDir": "www",
 	"bundledWebRuntime": false,
 	"plugins": {

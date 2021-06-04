@@ -44,9 +44,9 @@ export class NotifyModalComponent implements OnInit {
   async saveNotify(): Promise<void> {
     localStorage.setItem('NOTIFY', JSON.stringify(this.notify));
     const toast = await this.toastController.create({
-      message: 'Vaccine Center Slot will be Notified',
-      duration: 500,
-      position: 'top'
+      message: 'You will be notified when vaccine available',
+      duration: 1000,
+      position: 'middle'
     });
     toast.present();
     this.modalController.dismiss('R');

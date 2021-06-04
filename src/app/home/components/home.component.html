@@ -8,10 +8,12 @@
       [class.active]="intervalRunning"
       class="notify-outline-icon"
       name="notifications-outline"
+      [class.disabled]="!this.centerIds?.length"
       (click)="openNotificationSettings()"></ion-icon>
     <ion-icon slot="end"
       class="refresh-outline-icon"
       name="reload-outline"
+      [class.disabled]="!this.centerIds?.length"
       (click)="getCenters()"></ion-icon>
     <ion-icon class="show-only-available"
       [class.active]="search.onlyAvailable"
