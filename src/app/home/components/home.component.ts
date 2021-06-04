@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
-import { ModalController, ToastController, ViewWillEnter } from '@ionic/angular';
+import { LoadingController, ModalController, ToastController, ViewWillEnter } from '@ionic/angular';
 import * as _moment from 'moment';
 import { forkJoin } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -33,11 +33,14 @@ export class HomeComponent implements OnInit, ViewWillEnter {
     active: false
   }
   intervalRunning: boolean = false;
+  defaultInterval: any = { intervalDuration: 10, notifyTillDate: moment().add(5, 'days').format('YYYY-MM-DD') };
+  loading: any;
 
   constructor(private localNotifications: LocalNotifications,
     private readonly notificationService: NotificationService,
     private readonly modalController: ModalController,
-    private readonly toastController: ToastController) {
+    private readonly toastController: ToastController,
+    private readonly loadingController: LoadingController) {
   }
 
   ngOnInit(): void { }
@@ -47,7 +50,7 @@ export class HomeComponent implements OnInit, ViewWillEnter {
   }
 
   onPageRender(): void {
-    const notify = JSON.parse(localStorage.getItem('NOTIFY') || '{}');
+    const notify = JSON.parse(localStorage.getItem('NOTIFY') || JSON.stringify(this.defaultInterval));
     this.intervalSettings = {
       ...notify,
       active: this.isNotificationActive(notify.notifyTillDate)
@@ -108,17 +111,33 @@ export class HomeComponent implements OnInit, ViewWillEnter {
   }
 
   private isNotificationActive(tillDate: any): boolean {
-    return moment(moment()).isSameOrBefore(tillDate);
+    return moment(moment().format('YYYY-MM-DD')).isSameOrBefore(tillDate);
   }
 
-  private getLatestSlots(): void {
+  private async showLoading(): Promise<any> {
+    this.loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...'
+    });
+    return await this.loading.present();
+  }
+
+  private hideLoading(): void {
+    this.loading.dismiss();
+  }
+
+  private async getLatestSlots(): Promise<void> {
+    this.latestCenterAvailability = [];
+    this.nonAvailableCenters = [];
     const groupCalls: any = [];
     const groupBy = this.groupByDistrict();
+    await this.showLoading();
     for (let group in groupBy) {
       groupCalls.push(this.notificationService.getCenters(group, moment().format('DD-MM-YYYY')));
     }
     forkJoin(groupCalls).pipe(take(1)).subscribe((groups) => {
       groups.forEach((group: any = []) => {
+        this.hideLoading();
         this.latestCenterAvailability = [
           ...this.latestCenterAvailability,
           ...group.filter((center: any) => {

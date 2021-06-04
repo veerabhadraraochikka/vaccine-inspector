@@ -13,8 +13,6 @@ const datePicker: DatePickerPluginInterface = Plugins.DatePickerPlugin as any;
 })
 export class NotifyModalComponent implements OnInit {
 
-  minDate: any;
-  maxDate: any;
   intervals: any = [{ value: 5, key: '5 Minutes' },
   { value: 10, key: '10 Minutes' },
   { value: 15, key: '15 Minutes' },
@@ -25,24 +23,21 @@ export class NotifyModalComponent implements OnInit {
   notify: any;
 
   constructor(public modalController: ModalController,
-    public toastController: ToastController) {
-    this.minDate = moment().format('YYYY-MM-DD');
-    this.maxDate = moment().add(10, 'days').format('YYYY-MM-DD');
-  }
+    public toastController: ToastController) { }
 
   ngOnInit(): void {
-    const defaults = { intervalDuration: 10, notifyTillDate: moment().add(1, 'days').format('YYYY-MM-DD') };
+    const defaults = { intervalDuration: 10, notifyTillDate: moment().add(5, 'days').format('YYYY-MM-DD') };
     this.notify = JSON.parse(localStorage.getItem('NOTIFY') || JSON.stringify(defaults));
   }
 
   openDatePicker(): void {
     datePicker.present({
       mode: 'date',
-      min: this.minDate,
-      max: this.maxDate,
-      date: this.notify.notifyTillDate
+      min: moment().toISOString(),
+      date: this.notify.notifyTillDate + 'T00:00:00.000Z',
+      max: moment().add(10, 'days').toISOString()
     } as DatePickerOptions).then((date) => {
-      this.notify.notifyTillDate = moment(date as any).format('YYYY-MM-DD');
+      date.value && (this.notify.notifyTillDate = moment(date.value).format('YYYY-MM-DD'))
     });
   }
 

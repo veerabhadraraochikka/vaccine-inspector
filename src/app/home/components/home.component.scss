@@ -39,11 +39,21 @@
   }
 }
 
+.refresh-outline-icon {
+  position: absolute;
+  cursor: pointer;
+  right: 60px;
+  font-size: 26px;
+  &:hover {
+    color: rgb(0, 201, 10);
+  }
+}
+
 .notify-outline-icon {
   position: absolute;
   cursor: pointer;
-  right: 10px;
-  font-size: 24px;
+  right: 15px;
+  font-size: 28px;
   color: red;
   &:hover {
     color: #2202b4;

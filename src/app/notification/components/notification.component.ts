@@ -21,8 +21,6 @@ export class NotificationComponent implements OnInit {
   statevalue: any = '';
   districtValue: any = '';
   dateValue: string;
-  maxDate: string;
-  minDate: string;
   selectedCenter: string;
   loading: any;
   search: any = {
@@ -38,21 +36,7 @@ export class NotificationComponent implements OnInit {
     private readonly notificationService: NotificationService,
     private readonly loadingController: LoadingController,
     private readonly toastController: ToastController) {
-    this.minDate = moment().format('YYYY-MM-DD');
-    this.dateValue = this.minDate;
-    this.maxDate = moment().add(10, 'days').format('YYYY-MM-DD');
-  }
-
-  async showLoading(): Promise<any> {
-    this.loading = await this.loadingController.create({
-      cssClass: 'my-custom-class',
-      message: 'Please wait...'
-    });
-    return await this.loading.present();
-  }
-
-  hideLoading(): void {
-    this.loading.dismiss();
+    this.dateValue = moment().format('YYYY-MM-DD');
   }
 
   async ngOnInit(): Promise<void> {
@@ -85,11 +69,11 @@ export class NotificationComponent implements OnInit {
   openDatePicker(): void {
     datePicker.present({
       mode: 'date',
-      min: this.minDate,
-      max: this.maxDate,
-      date: this.dateValue
+      min: moment().toISOString(),
+      date: this.dateValue + 'T00:00:00.000Z',
+      max: moment().add(10, 'days').toISOString()
     } as DatePickerOptions).then((date) => {
-      this.dateValue = moment(date as any).format('YYYY-MM-DD');
+      date.value && (this.dateValue = moment(date.value).format('YYYY-MM-DD'))
     });
   }
 
@@ -106,6 +90,18 @@ export class NotificationComponent implements OnInit {
       position: 'top'
     });
     toast.present();
+  }
+
+  private async showLoading(): Promise<any> {
+    this.loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...'
+    });
+    return await this.loading.present();
+  }
+
+  private hideLoading(): void {
+    this.loading.dismiss();
   }
 
   private async getCenters(): Promise<void> {
