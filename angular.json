@@ -33,13 +33,13 @@
             ],
             "styles": ["src/theme/variables.scss", "src/global.scss"],
             "scripts": [],
-            "aot": false,
-            "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
+            "aot": true,
+            "vendorChunk": false,
+            "extractLicenses": true,
+            "buildOptimizer": true,
+            "sourceMap": false,
+            "optimization": true,
+            "namedChunks": false
           },
           "configurations": {
             "production": {

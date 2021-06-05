@@ -13,7 +13,8 @@ const datePicker: DatePickerPluginInterface = Plugins.DatePickerPlugin as any;
 })
 export class NotifyModalComponent implements OnInit {
 
-  intervals: any = [{ value: 5, key: '5 Minutes' },
+  intervals: any = [{ value: 2, key: '2 Minutes' },
+  { value: 5, key: '5 Minutes' },
   { value: 10, key: '10 Minutes' },
   { value: 15, key: '15 Minutes' },
   { value: 30, key: '30 Minutes' },

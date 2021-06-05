@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { Platform } from '@ionic/angular';
 
 @Component({
@@ -8,9 +9,9 @@ import { Platform } from '@ionic/angular';
 })
 export class AppComponent {
 
-  constructor(private platform: Platform) {
+  constructor(private platform: Platform, private backgroundMode: BackgroundMode) {
     this.platform.ready().then(() => {
-
+      this.backgroundMode.enable();
     });
   }
 }
